@@ -1,3 +1,8 @@
+# 
+# Working file for token decoding.
+# Not part of app's main routine.
+#
+
 import os
 import requests
 from dotenv import load_dotenv
@@ -7,13 +12,9 @@ load_dotenv()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 SECRET = os.getenv("SECRET")
-EMAIL = os.getenv("EMAIL")
 
-full_token = os.getenv("FULL_TOKEN")
+bearer = os.getenv("BEARER")
 
+payload = bearer.split(".", -1)[1]
 
-
-
-
-inner_token = full_token.split(".", -1)[1]
-
+print(payload)

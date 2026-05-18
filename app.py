@@ -1,38 +1,69 @@
 import os
 import requests
 from dotenv import load_dotenv
+from k_payloads import k_payloads 
 
 load_dotenv()
 
-CLIENT_ID = os.getenv("CLIENT_ID")
-SECRET = os.getenv("SECRET")
-EMAIL = os.getenv("EMAIL")
+BEARER = os.getenv("BEARER")
 
 url = "https://graphql.klutchcard.com/graphql"
 
-payload = {
-    "query": """
-        mutation($clientId: String, $secretKey: String) {
-            createSessionToken(clientId: $clientId, secretKey: $secretKey)
-        }
-    """,
-    "variables": {
-        "clientId": CLIENT_ID,
-        "secretKey": SECRET
-    }
+headers = {
+    "Authorization": f"Bearer {BEARER}",
+    "Content-Type": "application/json"
 }
 
-headers = {"Content-Type": "application/json"}
 
-response = requests.post(url, headers=headers, json=payload)
-data = response.json()
+def get_token():
+    CLIENT_ID = os.getenv("CLIENT_ID")
+    SECRET = os.getenv("SECRET")
 
-print(data)
+    del headers["Authorization"]
 
-if "errors" in data:
-    print("\nAuth failed:")
-    for err in data["errors"]:
-        print(" ", err.get("message"))
-elif "data" in data:
-    session_token = data["data"]["createSessionToken"]
-    print(f"\nSession token: {session_token}")
+    payload = k_payloads["get_token"]
+    payload["variables"]["clientId"] = CLIENT_ID
+    payload["variables"]["secretKey"] = SECRET
+
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
+
+    print(data)
+
+
+def get_cards():
+    payload = k_payloads["card_list"]
+
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
+    cards = data['data']['cards']
+    card_ct = 0
+
+    print(f"\n\n--- CARDS ---\n")
+    for card in cards:
+        print(f"{card['lastFour']}\t{card['name']:12}\t{card['status']}\n")
+        card_ct += 1
+
+    print(f"\nrun complete: {card_ct} cards processed")
+
+
+
+# MAIN ROUTINE
+
+prompt = "\n\n\nSelect task (T = token, CL = card list, Q = quit): "
+
+while True:
+    curr_task = input(prompt)
+    curr_task = curr_task.upper()
+
+    if curr_task == "T":
+        get_token()
+    elif curr_task == "CL":
+        get_cards()
+    elif curr_task == "Q":
+        print("\n As you wish, exiting ...")
+        break
+    else:
+        print("\n** ERR: invalid task, exiting ...")
+        break
+
