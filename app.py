@@ -1,9 +1,9 @@
 import os
 import requests
-from dotenv import load_dotenv
+import dotenv
 from k_payloads import k_payloads 
 
-load_dotenv()
+dotenv.load_dotenv()
 
 BEARER = os.getenv("BEARER")
 
@@ -20,6 +20,7 @@ def get_token():
     SECRET = os.getenv("SECRET")
 
     del headers["Authorization"]
+    f_dotenv = dotenv.find_dotenv()
 
     payload = k_payloads["get_token"]
     payload["variables"]["clientId"] = CLIENT_ID
@@ -28,8 +29,15 @@ def get_token():
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
     print(data)
+    new_sess_token = data["data"]["createSessionToken"]
+    print(f"new token {new_sess_token}")
+
+    os.environ["BEARER"] = new_sess_token
+    print(f"new env var 'BEARER' {os.environ["BEARER"]}")
+    dotenv.set_key(f_dotenv, "BEARER", os.environ["BEARER"])
 
     headers["Authorization"] = data["data"]["createSessionToken"]
+    print(f"headers {headers}")
 
 def get_balance():
     payload = k_payloads["bal"]
