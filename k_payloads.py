@@ -11,6 +11,22 @@ k_payloads = {
         "variables": {}
     },
 
+    "bal":
+    {
+        "query": """
+            query {
+                account {
+                    revolvingLoan {
+                        balance
+                        limit
+
+                    }
+                }
+            }
+        """,
+        "variables": {}
+    },
+
     "card_list":
     {
         "query": """
@@ -27,6 +43,13 @@ k_payloads = {
             }
         """,
         "variables": {}
+    },
+
+    "trx_list":
+    {
+        "query": """
+
+        """
     }
 
 }

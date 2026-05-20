@@ -27,15 +27,23 @@ def get_token():
 
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
-
     print(data)
 
+    headers["Authorization"] = data["data"]["createSessionToken"]
+
+def get_balance():
+    payload = k_payloads["bal"]
+
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
+    print(data)
 
 def get_cards():
     payload = k_payloads["card_list"]
 
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
+    print(data)
     cards = data['data']['cards']
     card_ct = 0
 
@@ -50,7 +58,7 @@ def get_cards():
 
 # MAIN ROUTINE
 
-prompt = "\n\n\nSelect task (T = token, CL = card list, Q = quit): "
+prompt = "\n\n\nSelect task (T = token, B = balance, CL = card list, Q = quit): "
 
 while True:
     curr_task = input(prompt)
@@ -58,6 +66,8 @@ while True:
 
     if curr_task == "T":
         get_token()
+    elif curr_task == "B":
+        get_balance()
     elif curr_task == "CL":
         get_cards()
     elif curr_task == "Q":
