@@ -45,6 +45,7 @@ def get_balance():
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
     print(data)
+    print(f"\n\n    Balance:  . . . . . . . .   $ {data["data"]["account"]["revolvingLoan"]["balance"] * -1}\n\n")
 
 def get_cards():
     payload = k_payloads["card_list"]
