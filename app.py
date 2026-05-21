@@ -63,11 +63,16 @@ def get_cards():
 
     print(f"\nrun complete: {card_ct} cards processed")
 
+def get_trans():
+    payload = k_payloads["trx_list"]
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
+    print(data)
 
 
 # MAIN ROUTINE
 
-prompt = "\n\n\nSelect task (T = token, B = balance, CL = card list, Q = quit): "
+prompt = "\n\n\nSelect task (T = token, B = balance, CL = card list, XL = transaction list, Q = quit): "
 
 while True:
     curr_task = input(prompt)
@@ -75,10 +80,14 @@ while True:
 
     if curr_task == "T":
         get_token()
+        BEARER = os.getenv("BEARER")
+        print(f"bearer var: {BEARER}")
     elif curr_task == "B":
         get_balance()
     elif curr_task == "CL":
         get_cards()
+    elif curr_task == "XL":
+        get_trans()
     elif curr_task == "Q":
         print("\n As you wish, exiting ...")
         break
