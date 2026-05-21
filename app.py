@@ -53,7 +53,6 @@ def get_cards():
 
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
-    print(data)
     cards = data['data']['cards']
     card_ct = 0
 
@@ -68,8 +67,17 @@ def get_trans():
     payload = k_payloads["trx_list"]
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
-    print(data)
+    t_list = data['data']['transactions']
 
+    print(f"\n\n*** TRANSACTIONS ***\n--------------------\n")
+    for t in t_list:
+        print(f"{t['transactionDate']}")
+        if t['card']:
+            print(f"  card:    {t['merchantName']} - {cards[t['card']['id']]['last_4']}")
+        else:
+            print(f"  card:    {t['merchantName']}")
+        print(f"  amt:     {t['amount']:>10,.2f}")
+        print(f"  status:  {t['transactionStatus'].lower()}\n")
 
 # MAIN ROUTINE
 
