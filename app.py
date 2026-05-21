@@ -2,6 +2,7 @@ import os
 import requests
 import dotenv
 from k_payloads import k_payloads 
+from cards import cards
 
 dotenv.load_dotenv()
 
@@ -84,6 +85,7 @@ while True:
         print(f"bearer var: {BEARER}")
     elif curr_task == "B":
         get_balance()
+        print(cards["1234"])
     elif curr_task == "CL":
         get_cards()
     elif curr_task == "XL":
