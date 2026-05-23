@@ -3,7 +3,7 @@ import requests
 import dotenv
 from k_payloads import k_payloads 
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(override=True)
 
 BEARER = os.getenv("BEARER")
 
@@ -35,6 +35,7 @@ def get_token():
     os.environ["BEARER"] = new_sess_token
     print(f"new env var 'BEARER' {os.environ["BEARER"]}")
     dotenv.set_key(f_dotenv, "BEARER", os.environ["BEARER"])
+    dotenv.load_dotenv(override=True)
 
     headers["Authorization"] = data["data"]["createSessionToken"]
     print(f"headers {headers}")
@@ -58,8 +59,9 @@ def get_cards():
 
     print(f"\n\n--- CARDS ---\n")
     for card in cards:
-        print(f"{card['lastFour']}\t{card['name']:12}\t{card['status']}\n")
-        card_ct += 1
+        if card['status'] != "TERMINATED":
+            print(f"{card['lastFour']}\t\t{card['name']:12}\t{card['status']}\n")
+            card_ct += 1
 
     print(f"\nrun complete: {card_ct} cards processed")
 
