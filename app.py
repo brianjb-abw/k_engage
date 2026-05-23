@@ -2,6 +2,7 @@ import os
 import requests
 import dotenv
 from k_payloads import k_payloads 
+from cards import cards
 
 dotenv.load_dotenv(override=True)
 
@@ -53,7 +54,6 @@ def get_cards():
 
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
-    print(data)
     cards = data['data']['cards']
     card_ct = 0
 
@@ -65,11 +65,25 @@ def get_cards():
 
     print(f"\nrun complete: {card_ct} cards processed")
 
+def get_trans():
+    payload = k_payloads["trx_list"]
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
+    t_list = data['data']['transactions']
 
+    print(f"\n\n*** TRANSACTIONS ***\n--------------------\n")
+    for t in t_list:
+        print(f"{t['transactionDate']}")
+        if t['card']:
+            print(f"  card:    {t['merchantName']} - {cards[t['card']['id']]['last_4']}")
+        else:
+            print(f"  card:    {t['merchantName']}")
+        print(f"  amt:     {t['amount']:>10,.2f}")
+        print(f"  status:  {t['transactionStatus'].lower()}\n")
 
 # MAIN ROUTINE
 
-prompt = "\n\n\nSelect task (T = token, B = balance, CL = card list, Q = quit): "
+prompt = "\n\n\nSelect task (T = token, B = balance, CL = card list, XL = transaction list, Q = quit): "
 
 while True:
     curr_task = input(prompt)
@@ -77,10 +91,15 @@ while True:
 
     if curr_task == "T":
         get_token()
+        BEARER = os.getenv("BEARER")
+        print(f"bearer var: {BEARER}")
     elif curr_task == "B":
         get_balance()
+        print(cards["1234"])
     elif curr_task == "CL":
         get_cards()
+    elif curr_task == "XL":
+        get_trans()
     elif curr_task == "Q":
         print("\n As you wish, exiting ...")
         break
