@@ -22,7 +22,13 @@ headers = {
 }
 
 # ----- TOKEN EXP -----
-token_exp = datetime.strptime(os.getenv('TOKEN_EXP'), '%Y-%m-%d %H:%M:%S.%f')
+if os.getenv('TOKEN_EXP') == '':
+    token_exp = datetime.now() - timedelta(minutes=60)
+    dotenv.set_key(f_dotenv, 'TOKEN_EXP', datetime.strftime(token_exp, '%Y-%m-%d %H:%M:%S.%f'))
+    dotenv.load_dotenv(override=True)
+else:
+    token_exp = datetime.strptime(os.getenv('TOKEN_EXP'), '%Y-%m-%d %H:%M:%S.%f')
+
 
 
 def get_token():
@@ -91,33 +97,41 @@ def get_trans():
         print(t)
 
 
+# ----- MENU SUBS -----
+menu = {
+    "T": get_token,
+    "B": get_balance,
+    "CL": get_cards,
+    "XL": get_trans
+}
+
+
+
 # ----- MAIN ----- #
 def main():
 
-    prompt = "\n\n\nSelect task (T = token, B = balance, CL = card list, XL = transaction list, Q = quit): "
+    prompt = "\n\nSelect task (T = token, B = balance, CL = card list, XL = transaction list, Q = quit): "
 
     while True:
         curr_task = input(prompt)
         curr_task = curr_task.upper()
 
+        # print("checking for end program menu choice")
+        if curr_task == "Q":
+            print("\n As you wish, exiting ...")
+            break
+        elif curr_task not in menu.keys():
+            print("\n** ERR: invalid task, exiting ...")
+            break
+
+        # print("checking for stale token")
         if curr_task != "T":
             if ((token_exp - datetime.now()).total_seconds())/60 < 10:
                 get_token()
         
-        if curr_task == "T":
-            get_token()
-        elif curr_task == "B":
-            get_balance()
-        elif curr_task == "CL":
-            get_cards()
-        elif curr_task == "XL":
-            get_trans()
-        elif curr_task == "Q":
-            print("\n As you wish, exiting ...")
-            break
-        else:
-            print("\n** ERR: invalid task, exiting ...")
-            break
+        menu[curr_task]()
+
+
 
 
 
