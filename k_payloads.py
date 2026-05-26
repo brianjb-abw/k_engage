@@ -11,7 +11,7 @@ k_payloads = {
         "variables": {}
     },
 
-    "bal":
+    "get_bal":
     {
         "query": """
             query {
