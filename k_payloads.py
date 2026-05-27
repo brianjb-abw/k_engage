@@ -90,44 +90,4 @@ k_payloads = {
 }
 
 
-    # "trx_list":
-    # {
-    #     "query": """
-    #         query {
-    #             transactions {
-    #                 id
-    #                 transactionDate
-    #                 card {id}
-    #                 transactionStatus
-    #                 transactionType
-    #                 merchantName
-    #                 amount
-    #                 category {
-    #                     id
-    #                     name
-    #                 }
-    #                 mcc {
-    #                     code
-    #                     description
-    #                     category
-    #                 }
-    #                 zipCode
-    #                 streetAddress
-    #                 city
-    #                 state
-    #                 merchantId
-    #                 cardPresent
-    #                 cardHolderPresent
-    #                 entryMode
-    #                 terminalType
-    #                 terminalId
-    #                 merchantLogo
-    #                 mid
-    #                 merchantOfficialPage
-    #                 merchantPhoneNumber
-    #                 cardAcceptorId
-    #             }
-    #         }
-    #     """,
-    #     "variables": {}
-    # }
+ 

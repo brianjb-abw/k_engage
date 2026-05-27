@@ -46,7 +46,6 @@ def get_token():
     data = response.json()
 
     new_sess_token = data['data']['createSessionToken']
-    print(f"new token:  {new_sess_token}")  # <<<<<< REMOVE
 
     token_exp = datetime.now() + timedelta(minutes=50)
     print(datetime.strftime(token_exp, '%Y-%m-%d %H:%M:%S.%f'))
@@ -56,7 +55,6 @@ def get_token():
     dotenv.load_dotenv(override=True)
 
     headers['Authorization'] = f"Bearer {os.getenv('BEARER')}"
-    print(f"headers {headers}") # <<<<<< REMOVE
 
 
 def get_balance():
