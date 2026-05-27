@@ -85,6 +85,34 @@ k_payloads = {
             }
         """,
         "variables": {}
+    },
+
+    "trx_list_p": 
+    {
+        "query": """
+            query($filter: TransactionFilter, $sortOrder: TransactionSortOrder) {
+                transactionsPaginated(filter: $filter, sortOrder: $sortOrder) {
+                    list {
+                        id
+                        transactionDate
+                        card { id }
+                        transactionStatus
+                        declineReason
+                        transactionType
+                        merchantName
+                        amount
+                        category { id name }
+                        mcc { code description category }
+                        zipCode
+                        streetAddress
+                        city
+                        state
+                        merchantId
+                    }
+                }
+            }
+        """,
+        "variables": {}
     }
 
 }

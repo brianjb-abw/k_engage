@@ -95,12 +95,26 @@ def get_trans():
         print(t)
 
 
+def get_trans_p():
+    payload = k_payloads["trx_list_p"]
+    tx_filter = {}
+    tx_filter["transactionStatus"] = ["PENDING", "SETTLED"]
+    payload["variables"]["filter"] = tx_filter
+    payload["variables"]["sortOrder"] = "UPDATED_DATE_DESC"
+
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
+    print(data)
+
+
+
 # ----- MENU SUBS -----
 menu = {
     "T": get_token,
     "B": get_balance,
     "CL": get_cards,
-    "XL": get_trans
+    "XL": get_trans,
+    "XP": get_trans_p
 }
 
 
@@ -108,7 +122,7 @@ menu = {
 # ----- MAIN ----- #
 def main():
 
-    prompt = "\n\nSelect task (T = token, B = balance, CL = card list, XL = transaction list, Q = quit): "
+    prompt = "\n\nSelect task: (T = token, B = balance, CL = card list, XL = transaction list, XP = transaction_list w params, Q = quit): "
 
     while True:
         curr_task = input(prompt)
