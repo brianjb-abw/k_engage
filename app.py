@@ -76,12 +76,14 @@ def get_cards():
 
     print(f"\n\n--- CARDS ---\n")
     for card in cards:
-        # if card['status'] != "TERMINATED":
-        print(card)
+        print(f"\n----- {card['name']} -----")
+        for k in card.keys():
+            print(f"{k:16}\t {card[k]}")
+        print("\n")
         
         card_ct += 1
 
-    print(f"\nrun complete: {card_ct} cards processed")
+    print(f"\nrun complete: {card_ct} cards found")
 
 
 def get_trans():
@@ -92,7 +94,14 @@ def get_trans():
 
     print(f"\n\n--- TRANSACTIONS ---\n")
     for t in t_list:
-        print(t)
+        t_date = t['transactionDate']
+        print(
+            f"{t_date[0:10]} - {t_date[11:20]}   "
+            f"\t{t['transactionType']:12}"
+            f"\t{t['merchantName'][:20]:20}\t"
+            f"\t{t['amount']:>8,.2f}   "
+            f"\t{t['transactionStatus']}\n"
+        )
 
 
 def get_trans_p():
